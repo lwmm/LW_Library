@@ -90,6 +90,19 @@ class Imagefile extends \LwLibrary\Filesystem\File
         $this->height_max = $height;
     }
 
+    public function setImageFactory($ImageFactory) 
+    {
+        $this->ImageFactory = $ImageFactorty;
+    }
+
+    public function getImageFactory()
+    {
+        if (!$this->ImageFactory) {
+            $this->ImageFactory = new \LwLibrary\Image\ImageFactory();
+        }
+        return $this->ImageFactory;
+    }
+
     /**
      * resize
      * Das Bild wird geresized.
@@ -103,7 +116,7 @@ class Imagefile extends \LwLibrary\Filesystem\File
      */
     public function resize($width_new, $height_new, $keepAspect = false, $copyImage = false)
     {
-        $image = new \lw_image($this->path . $this->filename);
+        $image = $this->getImageFactory()->getObject($this->path.$this->filename);
 
         if ($width_new > $this->width_max || $height_new > $this->height_max || $width_new < 1 || $height_new < 1 || !is_numeric($width_new) || !is_numeric($height_new)) {
             throw new \Exception("Bildgroessen stimmen nicht");
@@ -115,7 +128,6 @@ class Imagefile extends \LwLibrary\Filesystem\File
             if ($copyImage != false) {
                 $filename_noext = basename($this->path . $this->filename, "." . $this->ext);
                 $newname = $this->getNextFilename($this->path . $filename_noext . "_" . $width_new . "x" . $height_new . "." . $this->ext);
-
                 $image->scaleImage($width_new, $height_new, $newname, $keepAspect, false);
             } else {
                 $image->scaleImage($width_new, $height_new, false, $keepAspect, false);
@@ -124,5 +136,4 @@ class Imagefile extends \LwLibrary\Filesystem\File
         }
         return false;
     }
-
 }
