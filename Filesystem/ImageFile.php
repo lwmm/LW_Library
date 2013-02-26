@@ -28,7 +28,7 @@ namespace LwLibrary\Filesystem;
  * @author   Dr. Andreas Eckhoff
  * @since    PHP 5.0
  */
-class Imagefile extends \LwLibrary\Filesystem\File
+class ImageFile extends \LwLibrary\Filesystem\File
 {
 
     private static $files = array();
@@ -61,7 +61,7 @@ class Imagefile extends \LwLibrary\Filesystem\File
             return false;
         }
         if (self::$files[$id] == null) {
-            self::$files[$id] = new \LwLibrary\Filesystem\Imagefile($path, $filename, $ext);
+            self::$files[$id] = new \LwLibrary\Filesystem\ImageFile($path, $filename, $ext);
         }
         return self::$files[$id];
     }
@@ -86,13 +86,23 @@ class Imagefile extends \LwLibrary\Filesystem\File
      */
     public function setMaxSizes($width, $height)
     {
-        $this->width_max = $width;
-        $this->height_max = $height;
+        $this->maxWidth = $width;
+        $this->maxHeight = $height;
+    }
+    
+    public function getMaxWidth()
+    {
+        return $this->maxWidth;
+    }
+    
+    public function getMaxHeight()
+    {
+        return $this->maxHeight;
     }
 
     public function setImageFactory($ImageFactory) 
     {
-        $this->ImageFactory = $ImageFactorty;
+        $this->ImageFactory = $ImageFactory;
     }
 
     public function getImageFactory()
@@ -116,9 +126,9 @@ class Imagefile extends \LwLibrary\Filesystem\File
      */
     public function resize($width_new, $height_new, $keepAspect = false, $copyImage = false)
     {
-        $image = $this->getImageFactory()->getObject($this->path.$this->filename);
+        $image = $this->getImageFactory()->createObject($this->path.$this->filename);
 
-        if ($width_new > $this->width_max || $height_new > $this->height_max || $width_new < 1 || $height_new < 1 || !is_numeric($width_new) || !is_numeric($height_new)) {
+        if ($width_new > $this->maxWidth || $height_new > $this->maxHeight || $width_new < 1 || $height_new < 1 || !is_numeric($width_new) || !is_numeric($height_new)) {
             throw new \Exception("Bildgroessen stimmen nicht");
         } else {
             if ($keepAspect !== false) {

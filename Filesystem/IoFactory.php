@@ -28,13 +28,13 @@
  * @since    PHP 5.3
  */
 
-namespace LwLibrary\Image;
+namespace LwLibrary\Filesystem;
 
-class ImageFactory
+class IoFactory
 {
-    function createObject($filePath)
+    function createObject()
     {
-        $object = new \LwLibrary\Image\Image($filePath);
+        $object = new \LwLibrary\Filesystem\Io();
         return $object;
     }
 }

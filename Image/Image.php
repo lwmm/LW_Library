@@ -41,9 +41,10 @@ class Image
 		$this->errors = array();
 	}
 	
+        
 	function createImage($source)
 	{
-		$ext = strtolower(lw_io::getFileExtension($source));
+		$ext = strtolower(\lw_io::getFileExtension($source));
 		switch($ext)
 		{
 			case "jpg":
@@ -67,7 +68,7 @@ class Image
 
 	function saveImage($dest, $destination)
 	{
-		$ext = strtolower(lw_io::getFileExtension($destination));
+		$ext = strtolower(\lw_io::getFileExtension($destination));
 		switch($ext)
 		{
 			case "jpg":
@@ -91,7 +92,7 @@ class Image
 	
 	function cropImage($source, $destination, $pos, $width, $height)
 	{
-		$src  = lw_image::createImage($source);
+		$src  = \LwLibrary\Image\Image::createImage($source);
 		$dest = imagecreatetruecolor($width, $height);
 		
 		if ($pos=="center")
@@ -109,7 +110,7 @@ class Image
 		
 		
 		imagecopy($dest, $src, 0, 0, $wstart, $hstart, $width, $height);
-		lw_image::saveImage($dest, $destination);
+		\LwLibrary\Image\Image::saveImage($dest, $destination);
 	}
 	
 	/**
